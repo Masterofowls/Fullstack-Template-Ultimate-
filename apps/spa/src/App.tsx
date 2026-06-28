@@ -3,6 +3,9 @@ import { AboutPage } from "./pages/AboutPage.js";
 import { HomePage } from "./pages/HomePage.js";
 import { NotFoundPage } from "./pages/NotFoundPage.js";
 
+// ── App name is driven by VITE_APP_NAME env var ──────────────────
+const APP_NAME = import.meta.env.VITE_APP_NAME ?? "My App";
+
 export function App() {
   return (
     <BrowserRouter>
@@ -17,9 +20,9 @@ export function App() {
               className="text-lg font-bold text-slate-900 dark:text-white"
               aria-label="Home"
             >
-              TS Template
+              {APP_NAME}
             </Link>
-            <ul className="flex items-center gap-6 list-none">
+            <ul className="flex list-none items-center gap-6">
               <li>
                 <Link
                   to="/"
@@ -49,13 +52,7 @@ export function App() {
         </main>
 
         <footer className="border-t border-slate-200 py-6 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
-          <p>
-            Built with{" "}
-            <span aria-label="love" role="img">
-              ❤️
-            </span>{" "}
-            using TypeScript, React &amp; Vite
-          </p>
+          <p>{APP_NAME} — built with TypeScript, React &amp; Vite</p>
         </footer>
       </div>
     </BrowserRouter>

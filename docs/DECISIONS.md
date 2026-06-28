@@ -1,5 +1,9 @@
 # Architecture Decision Records
 
+> **Template note**: These ADRs document the template's own design decisions. After running `scripts/init.sh`, replace or extend them with your project's own decisions.
+
+---
+
 ## ADR-001 — Use Bun as package manager and runtime
 
 **Status**: Accepted  

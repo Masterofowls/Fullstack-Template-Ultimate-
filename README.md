@@ -1,18 +1,69 @@
 # TypeScript React Fullstack Template
 
-A production-grade, opinionated monorepo template for building modern TypeScript React fullstack applications. Ships with Next.js, Vite, Biome, Bun workspaces, Jest, a CVE scanner CLI, and an index-check CLI — all pre-wired and ready to clone.
+> **This is a reusable template.** Follow the [Quick Start](#quick-start) below to initialise it for your project in under two minutes.
+
+A production-grade, opinionated **Bun monorepo** template for building TypeScript React fullstack applications. Ships with Next.js, Vite, Biome, Jest, CVE scanning, and index checking — all pre-wired and ready to clone.
+
+---
+
+## Using This Template
+
+### Option A — Interactive init script (recommended)
+
+```bash
+# 1. Clone
+git clone https://github.com/your-org/ts-react-fullstack-template my-project
+cd my-project
+
+# 2. Run the interactive initialiser
+bash scripts/init.sh
+```
+
+The script will ask for:
+
+| Prompt | Example |
+|---|---|
+| Project name (kebab-case) | `my-saas-app` |
+| Display name | `My SaaS App` |
+| Short description | `The best SaaS ever` |
+| Package scope | `myapp` → `@myapp/ui`, `@myapp/utils` |
+| Ports | `9000`, `9001` |
+| Which features to include | Next.js ✓ / Vite ✓ / Docker ✓ |
+
+It then replaces all placeholders, removes unused app directories, and re-initialises git with a clean history.
+
+### Option B — Edit `template.config.json` and run non-interactively
+
+```bash
+# 1. Edit the config
+vi template.config.json
+
+# 2. Apply
+bash scripts/init.sh --config
+```
+
+### Option C — Manual
+
+1. Search-and-replace `ts-react-fullstack-template` with your project name.
+2. Search-and-replace `@template/` with `@yourscope/`.
+3. Update `NEXT_PUBLIC_APP_NAME` / `VITE_APP_NAME` in `.env.local`.
+4. Delete apps or tools you don't need.
+5. Run `bun install`.
+
+---
 
 ## Contents
 
 - [Stack](#stack)
 - [Project Structure](#project-structure)
-- [Quick Start](#quick-start)
+- [Quick Start (after init)](#quick-start-after-init)
 - [Apps](#apps)
 - [Packages](#packages)
 - [CLI Tools](#cli-tools)
 - [Testing](#testing)
 - [CI/CD](#cicd)
 - [Environment Variables](#environment-variables)
+- [Removing Unused Features](#removing-unused-features)
 - [Contributing](#contributing)
 
 ---
@@ -28,7 +79,7 @@ A production-grade, opinionated monorepo template for building modern TypeScript
 | Linting + Formatting | [Biome](https://biomejs.dev) | 1.9 |
 | Unit / Integration Tests | [Jest](https://jestjs.io) + ts-jest | 29 |
 | E2E Tests | [Playwright](https://playwright.dev) | 1.49 |
-| CVE Scanner | CVE Lite CLI (built-in) | — |
+| CVE Scanner | CVE Lite CLI (built-in, OSV.dev) | — |
 | Index Validator | Index Check CLI (built-in) | — |
 
 ---
@@ -38,52 +89,43 @@ A production-grade, opinionated monorepo template for building modern TypeScript
 ```
 .
 ├── apps/
-│   ├── web/                # Next.js 15 App Router (port 9000)
-│   └── spa/                # Vite 6 React SPA (port 9001)
+│   ├── web/            # Next.js 15 App Router              (port 9000)
+│   └── spa/            # Vite 6 React SPA                   (port 9001)
 ├── packages/
-│   ├── ui/                 # Shared React components (@template/ui)
-│   ├── config/             # Shared tsconfig + biome base configs
-│   └── utils/              # Shared utilities (@template/utils)
+│   ├── ui/             # Shared React components             @template/ui
+│   ├── config/         # Shared tsconfig + biome presets     @template/config
+│   └── utils/          # Shared utilities                    @template/utils
 ├── tools/
-│   ├── cve-lite/           # CVE vulnerability scanner CLI
-│   └── index-check/        # Barrel file / export completeness CLI
+│   ├── cve-lite/       # CVE vulnerability scanner CLI
+│   └── index-check/    # Barrel file completeness CLI
 ├── tests/
-│   ├── unit/               # Jest unit tests
-│   ├── integration/        # Jest integration tests
-│   └── e2e/                # Playwright end-to-end tests
-├── docs/                   # Architecture, decisions, activity log
-├── scripts/                # Setup and utility shell scripts
-├── .github/workflows/      # CI/CD (GitHub Actions)
-├── biome.json              # Biome config (lint + format)
-├── bunfig.toml             # Bun configuration
-├── jest.config.ts          # Jest configuration
-├── playwright.config.ts    # Playwright configuration
-└── tsconfig.json           # Root TypeScript config
+│   ├── unit/           # Jest unit tests
+│   ├── integration/    # Jest integration tests
+│   └── e2e/            # Playwright E2E tests
+├── docs/               # ARCHITECTURE, DECISIONS, ACTIVITY_LOG
+├── infra/docker/       # Dockerfile + docker-compose
+├── scripts/            # init.sh, setup.sh, git-rollback.sh, check-env.sh
+├── .github/workflows/  # ci.yml, security.yml
+├── template.config.json  # ← Edit this before running init.sh
+├── biome.json
+├── jest.config.ts
+├── playwright.config.ts
+└── tsconfig.json
 ```
 
 ---
 
-## Quick Start
-
-### Prerequisites
-
-- [Bun](https://bun.sh) ≥ 1.1
-- Node.js ≥ 20 (for Jest / Playwright)
+## Quick Start (after init)
 
 ```bash
-# 1. Clone the template
-git clone <repo-url> my-project
-cd my-project
-
-# 2. Install all workspace dependencies
 bun install
+cp .env.example .env.local   # fill in your values
 
-# 3. Copy environment template
-cp .env.example .env.local
-
-# 4. Start development
-bun run dev:web    # Next.js on http://localhost:9000
-bun run dev:spa    # Vite SPA on http://localhost:9001
+bun run dev:web    # Next.js  → http://localhost:9000
+bun run dev:spa    # Vite SPA → http://localhost:9001
+bun run test:unit  # Jest
+bun run check      # Biome lint + format
+bun run cve        # CVE scan
 ```
 
 ---
@@ -93,26 +135,27 @@ bun run dev:spa    # Vite SPA on http://localhost:9001
 ### `apps/web` — Next.js 15
 
 - App Router with Server Components and streaming
-- Turbopack in development (`--turbopack`)
+- Turbopack HMR in development
 - Security headers pre-configured in `next.config.ts`
-- `/api/health` route for uptime checks
-- SEO metadata with `generateMetadata`, Open Graph, Twitter cards
+- `/api/health` route for uptime probes
+- All display text driven by `NEXT_PUBLIC_APP_NAME` / `NEXT_PUBLIC_APP_DESCRIPTION` env vars
 
 ```bash
-bun run dev:web          # Start dev server (port 9000)
-bun run build:web        # Production build
+bun run dev:web     # Start dev (port set by APP_PORT env var, default 9000)
+bun run build:web   # Production build
 ```
 
-### `apps/spa` — Vite + React
+### `apps/spa` — Vite + React 19
 
-- React 19 with React Router 7
-- PWA manifest + offline-ready structure
-- Proxy config for `/api` → Next.js
-- Code-split vendor/router chunks
+- React Router 7 (Home / About / 404)
+- PWA manifest for installability
+- `/api` dev proxy → Next.js
+- Code-split vendor + router chunks
+- App name driven by `VITE_APP_NAME` env var
 
 ```bash
-bun run dev:spa          # Start dev server (port 9001)
-bun run build:spa        # Production build
+bun run dev:spa     # Start dev (port set by SPA_PORT env var, default 9001)
+bun run build:spa   # Production build
 ```
 
 ---
@@ -121,19 +164,15 @@ bun run build:spa        # Production build
 
 ### `@template/ui`
 
-Shared, accessible React component library:
-
-- `Button` — variants (primary, secondary, ghost, danger), sizes, loading state
-- `Card`, `CardHeader`, `CardContent`, `CardFooter`
-- `Badge` — severity variants (success, warning, error, info)
+Shared accessible React component library. Import in either app:
 
 ```ts
 import { Button, Card, Badge } from "@template/ui";
 ```
 
-### `@template/utils`
+Components: `Button` (4 variants, 3 sizes, loading state), `Card` + `CardHeader/Content/Footer`, `Badge` (5 severity variants).
 
-Shared TypeScript utilities:
+### `@template/utils`
 
 ```ts
 import { cn, validateEnv, requireEnv, logger } from "@template/utils";
@@ -141,20 +180,26 @@ import { cn, validateEnv, requireEnv, logger } from "@template/utils";
 // Class name helper
 cn("base", isActive && "active", className);
 
-// Validate env at startup — crashes fast with clear messages
-validateEnv({ DATABASE_URL: { required: true }, PORT: { required: false, default: "9000" } });
+// Crash-fast env validation at startup
+validateEnv({
+  DATABASE_URL: { required: true },
+  PORT: { required: false, default: "9000" },
+});
 
-// Structured logger with levels
+// Leveled logger with child scopes
 logger.info("Server started", { port: 9000 });
-logger.child("Auth").warn("Token expired");
+logger.child("Auth").warn("Token near expiry");
 ```
 
 ### `@template/config`
 
-Shared `tsconfig` presets:
-- `base.json` — strict Node.js config
-- `react-app.json` — Vite/SPA with JSX
-- `nextjs.json` — Next.js App Router
+Shared `tsconfig` presets for all workspaces:
+
+| Preset | Used by |
+|---|---|
+| `base.json` | Node.js tools, packages |
+| `react-app.json` | Vite SPA |
+| `nextjs.json` | Next.js app |
 
 ---
 
@@ -162,124 +207,87 @@ Shared `tsconfig` presets:
 
 ### CVE Lite (`bun run cve`)
 
-Lightweight vulnerability scanner powered by the [OSV.dev](https://osv.dev) API.
-No API key required. Works offline-capable with graceful errors.
-
 ```bash
-# Scan current directory
-bun run cve
-
-# Scan specific path
-bun run cve -- --path apps/web
-
-# CI mode: exit code 1 on HIGH/CRITICAL
-bun run cve -- --fail-on-high
-
-# Output as JSON (for piping / reporting)
-bun run cve -- --format json > report.json
-
-# Include dev dependencies
-bun run cve -- --include-dev
+bun run cve                          # Scan ./package.json
+bun run cve -- --path apps/web       # Scan a specific workspace
+bun run cve -- --fail-on-high        # CI mode: exit 1 on HIGH/CRITICAL
+bun run cve -- --format json         # Machine-readable output
+bun run cve -- --include-dev         # Include devDependencies
+bun run cve -- --help                # All options
 ```
-
-**Options:**
-
-| Flag | Description | Default |
-|---|---|---|
-| `--path` | Directory to scan | `.` |
-| `--ecosystem` | Package ecosystem | `npm` |
-| `--format` | `table` \| `json` \| `minimal` | `table` |
-| `--fail-on-high` | Exit 1 on HIGH or CRITICAL findings | `false` |
-| `--include-dev` | Scan devDependencies too | `false` |
-| `--osv-api` | OSV API base URL | `https://api.osv.dev/v1` |
-
----
 
 ### Index Check (`bun run index-check`)
 
-Validates that every TypeScript directory with exportable files has a complete barrel (`index.ts`) file — and that all exports are re-exported.
-
 ```bash
-# Check packages directory
-bun run index-check -- --path packages
-
-# Auto-fix missing index files
-bun run index-check -- --path packages --auto-fix
-
-# Output as JSON
-bun run index-check -- --format json
-
-# Exclude test directories
-bun run index-check -- --exclude "__tests__,test,__mocks__"
+bun run index-check                          # Check current directory
+bun run index-check -- --path packages       # Check packages only
+bun run index-check -- --auto-fix            # Create missing index files
+bun run index-check -- --format json         # Machine-readable output
+bun run index-check -- --help                # All options
 ```
-
-**Options:**
-
-| Flag | Description | Default |
-|---|---|---|
-| `--path` | Root directory to scan | `.` |
-| `--ext` | File extensions to check | `ts,tsx` |
-| `--auto-fix` | Create/update missing index files | `false` |
-| `--exclude` | Comma-separated patterns to skip | `node_modules,dist` |
-| `--format` | `table` \| `json` | `table` |
 
 ---
 
 ## Testing
 
 ```bash
-# Unit tests (Jest)
-bun run test:unit
-
-# Integration tests
-bun run test:integration
-
-# E2E tests (Playwright) — requires running app
-bun run test:e2e
-
-# All unit + integration tests with coverage
+bun run test:unit         # Jest unit tests
+bun run test:integration  # Jest integration tests (requires running server)
+bun run test:e2e          # Playwright E2E
 bun run test -- --coverage
-
-# Watch mode
 bun run test:watch
 ```
-
-Test structure follows the **AAA pattern** (Arrange, Act, Assert) and is organized into:
-
-- `tests/unit/` — pure function tests, fast and isolated
-- `tests/integration/` — API tests against a running server
-- `tests/e2e/` — browser flows via Playwright
 
 ---
 
 ## CI/CD
 
-GitHub Actions workflows in `.github/workflows/`:
+`.github/workflows/ci.yml` runs on every push/PR to `main` and `develop`:
 
-| Workflow | Trigger | Jobs |
-|---|---|---|
-| `ci.yml` | Push / PR to `main`, `develop` | Install → Typecheck + Lint → Test → Build → CVE Scan → Index Check |
-| `security.yml` | Weekly (Monday 06:00 UTC) | Full CVE scan incl. dev deps |
+```
+install → typecheck → lint → test → build → CVE scan → index check
+```
+
+`.github/workflows/security.yml` runs weekly (Monday 06:00 UTC) for a full CVE scan including dev dependencies.
+
+**GitLab CI**: See [`docs/gitlab-ci-example.yml`](docs/gitlab-ci-example.yml) for an equivalent pipeline.
 
 ---
 
 ## Environment Variables
 
-Copy `.env.example` to `.env.local` and fill in values:
-
 ```bash
 cp .env.example .env.local
+# Then edit .env.local — the file is gitignored
 ```
 
-Required variables are validated at runtime using `validateEnv()`. Missing required variables cause the app to crash immediately with a descriptive error — no silent failures.
+Required variables are validated at startup by `validateEnv()` — missing required vars cause an immediate crash with a clear error message (no silent failures).
 
-See [`.env.example`](.env.example) for the full list and descriptions.
+See [`.env.example`](.env.example) for the complete list with inline documentation.
+
+---
+
+## Removing Unused Features
+
+Delete what you don't need — the template is designed to be trimmed:
+
+| Feature | What to delete |
+|---|---|
+| Next.js app | `apps/web/`, remove `build:web` / `dev:web` from root `package.json` |
+| Vite SPA | `apps/spa/`, remove `build:spa` / `dev:spa` from root `package.json` |
+| Docker | `infra/docker/` |
+| Playwright E2E | `playwright.config.ts`, `tests/e2e/` |
+| CVE Lite | `tools/cve-lite/`, remove `cve` script |
+| Index Check | `tools/index-check/`, remove `index-check` script |
+| Database config | Remove `DATABASE_URL` block from `.env.example` |
+
+Or use `bash scripts/init.sh` — it handles all of this interactively.
 
 ---
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines, branch naming, and PR conventions.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 

@@ -77,58 +77,58 @@ describe("requireEnv()", () => {
   });
 
   it("throws when env var is missing", () => {
-    process.env.MISSING_VAR = undefined;
+    delete process.env.MISSING_VAR;
     expect(() => requireEnv("MISSING_VAR")).toThrow(/MISSING_VAR/);
   });
 });
 
 describe("optionalEnv()", () => {
   it("returns env value if set", () => {
-    process.env["OPT_VAR"] = "value";
+    process.env.OPT_VAR = "value";
     expect(optionalEnv("OPT_VAR", "default")).toBe("value");
-    delete process.env["OPT_VAR"];
+    delete process.env.OPT_VAR;
   });
 
   it("returns fallback if not set", () => {
-    delete process.env["OPT_VAR"];
+    delete process.env.OPT_VAR;
     expect(optionalEnv("OPT_VAR", "default")).toBe("default");
   });
 });
 
 describe("boolEnv()", () => {
   it('returns true for "true"', () => {
-    process.env["BOOL_VAR"] = "true";
+    process.env.BOOL_VAR = "true";
     expect(boolEnv("BOOL_VAR")).toBe(true);
-    delete process.env["BOOL_VAR"];
+    delete process.env.BOOL_VAR;
   });
 
   it('returns true for "1"', () => {
-    process.env["BOOL_VAR"] = "1";
+    process.env.BOOL_VAR = "1";
     expect(boolEnv("BOOL_VAR")).toBe(true);
-    delete process.env["BOOL_VAR"];
+    delete process.env.BOOL_VAR;
   });
 
   it("returns fallback if not set", () => {
-    delete process.env["BOOL_VAR"];
+    delete process.env.BOOL_VAR;
     expect(boolEnv("BOOL_VAR", true)).toBe(true);
   });
 });
 
 describe("numberEnv()", () => {
   it("parses a valid number", () => {
-    process.env["NUM_VAR"] = "42";
+    process.env.NUM_VAR = "42";
     expect(numberEnv("NUM_VAR", 0)).toBe(42);
-    delete process.env["NUM_VAR"];
+    delete process.env.NUM_VAR;
   });
 
   it("returns fallback when not set", () => {
-    delete process.env["NUM_VAR"];
+    delete process.env.NUM_VAR;
     expect(numberEnv("NUM_VAR", 99)).toBe(99);
   });
 
   it("throws on invalid number string", () => {
-    process.env["NUM_VAR"] = "not-a-number";
+    process.env.NUM_VAR = "not-a-number";
     expect(() => numberEnv("NUM_VAR", 0)).toThrow(/must be a number/);
-    delete process.env["NUM_VAR"];
+    delete process.env.NUM_VAR;
   });
 });

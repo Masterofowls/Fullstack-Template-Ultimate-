@@ -3,9 +3,10 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Home",
-  description: "Welcome to the TypeScript React fullstack template",
 };
 
+// ── Feature cards ─────────────────────────────────────────────────────────────
+// Edit this array to showcase your project's own features.
 const FEATURES = [
   {
     title: "Next.js 15",
@@ -40,23 +41,21 @@ const FEATURES = [
 ] as const;
 
 export default function HomePage() {
+  const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "My App";
+  const appDescription =
+    process.env.NEXT_PUBLIC_APP_DESCRIPTION ?? "A production-grade TypeScript React application";
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
         <header className="mb-20 text-center">
           <div className="mb-6 inline-flex items-center rounded-full bg-blue-500/10 px-4 py-1.5 text-sm font-medium text-blue-400 ring-1 ring-blue-500/20">
-            v0.1.0 — Production Ready
+            v{process.env.npm_package_version ?? "0.1.0"} — Production Ready
           </div>
           <h1 className="mb-6 text-5xl font-bold tracking-tight text-white sm:text-6xl">
-            TypeScript React
-            <span className="block bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              Fullstack Template
-            </span>
+            {appName}
           </h1>
-          <p className="mx-auto max-w-2xl text-lg text-slate-400">
-            A production-grade monorepo template with Next.js, Vite, Biome, Bun, CVE scanning, and
-            index checking — everything you need to ship fast.
-          </p>
+          <p className="mx-auto max-w-2xl text-lg text-slate-400">{appDescription}</p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <Link
               href="/api/health"

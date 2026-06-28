@@ -1,23 +1,25 @@
 import type { NextConfig } from "next";
 
+// ── Customise these settings for your project ──────────────────────────────
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
 
   experimental: {
+    // typedRoutes enables compile-time checking of href values in <Link>.
+    // Remove if you don't use typed routes.
     typedRoutes: true,
   },
 
   images: {
     formats: ["image/avif", "image/webp"],
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**",
-      },
-    ],
+    // Add your allowed remote image hostnames here.
+    // Example: { protocol: "https", hostname: "images.example.com" }
+    remotePatterns: [],
   },
 
+  // Security headers applied to every response.
+  // Tighten the CSP header once you know your actual domains/scripts.
   headers: async () => [
     {
       source: "/(.*)",
@@ -34,6 +36,8 @@ const nextConfig: NextConfig = {
     },
   ],
 
+  // Packages that are internal workspaces — Next.js needs to transpile them.
+  // Add/remove based on which packages your web app consumes.
   transpilePackages: ["@template/ui", "@template/utils"],
 };
 

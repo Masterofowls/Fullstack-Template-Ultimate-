@@ -1,8 +1,8 @@
 {
-  "name": "ts-react-fullstack-template",
+  "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "description": "Advanced TypeScript React fullstack reusable monorepo template",
+  "description": "A production-grade TypeScript React fullstack monorepo",
   "workspaces": ["apps/*", "packages/*", "tools/*"],
   "scripts": {
     "dev": "bun run --filter '*' dev",
@@ -24,8 +24,9 @@
     "check:fix": "biome check --write .",
     "cve": "bun run tools/cve-lite/src/cli.ts",
     "index-check": "bun run tools/index-check/src/cli.ts",
-    "setup": "bun install && bun run scripts/setup.sh",
-    "clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name '.next' -type d -prune -exec rm -rf '{}' + && find . -name 'dist' -type d -prune -exec rm -rf '{}' +"
+    "init": "bash scripts/init.sh",
+    "setup": "bash scripts/setup.sh",
+    "clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + ; find . -name '.next' -type d -prune -exec rm -rf '{}' + ; find . -name 'dist' -type d -prune -exec rm -rf '{}' +"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

@@ -1,25 +1,25 @@
 # Activity Log
 
-This file records all significant changes to the repository in chronological order.
+Running history of significant changes to this project.
+
+> **How to use**: Append a time-stamped bullet to the relevant date section after
+> each significant action. Keep entries concise — one line per action is ideal.
 
 ---
 
 ## 2026-06-28
 
-- **Initial template scaffold** — Created the full monorepo structure with Bun workspaces
-- **Root configs** — Added `biome.json`, `tsconfig.json`, `bunfig.toml`, `jest.config.ts`, `playwright.config.ts`, `.gitignore`, `.env.example`
-- **apps/web** — Scaffolded Next.js 15 App Router with TypeScript, security headers, health API, SEO metadata, dark-mode home page
-- **apps/spa** — Scaffolded Vite 6 + React 19 SPA with React Router 7, PWA manifest, accessible navigation
-- **packages/ui** — Created shared component library: `Button`, `Card`, `Badge`
-- **packages/utils** — Created shared utilities: `cn()`, `validateEnv()`, `requireEnv()`, `logger`
-- **packages/config** — Created shared tsconfig presets (base, react-app, nextjs)
-- **tools/cve-lite** — Built CVE Lite CLI: scans package.json deps against OSV.dev batch API; table/JSON/minimal output; `--fail-on-high` for CI
-- **tools/index-check** — Built Index Check CLI: validates barrel file completeness; auto-fix mode; excludes patterns
-- **tests/** — Added Jest unit tests for utils, cve-scanner, index-checker; integration test for health API; Playwright E2E spec
-- **.github/workflows/** — CI pipeline (install → typecheck → lint → test → build → CVE scan → index check); weekly security workflow
-- **docs/** — Added `ARCHITECTURE.md`, `DECISIONS.md` (ADR-001 through ADR-006), `ACTIVITY_LOG.md`
-- **scripts/** — Added `setup.sh`, `git-rollback.sh`, `check-env.sh`
-- **README.md** — Full documentation with stack table, quick start, app/package/tool descriptions, CI table
-- **CONTRIBUTING.md** — Branch naming, commit conventions, code standards, PR checklist
+- **Template scaffold** — Created full monorepo from `ts-react-fullstack-template`
+- **Root configs** — `biome.json`, `tsconfig.json`, `bunfig.toml`, `jest.config.ts`, `playwright.config.ts`, `.gitignore`, `.env.example`
+- **apps/web** — Next.js 15 App Router; display name/description driven by `NEXT_PUBLIC_*` env vars
+- **apps/spa** — Vite 6 + React 19; app name driven by `VITE_APP_NAME` env var
+- **packages/** — `@template/ui` (Button, Card, Badge), `@template/utils` (cn, validateEnv, logger), `@template/config` (tsconfig presets)
+- **tools/cve-lite** — CVE Lite CLI (OSV.dev, table/JSON/minimal output, `--fail-on-high`)
+- **tools/index-check** — Index Check CLI (barrel validation, auto-fix mode)
+- **tests/** — 30 passing Jest unit tests; integration health check; Playwright E2E scaffold
+- **CI/CD** — GitHub Actions `ci.yml` + `security.yml`; GitLab CI example in `docs/`
+- **Template genericisation** — `template.config.json` + `scripts/init.sh` for zero-friction project init
+- **Docs** — `ARCHITECTURE.md`, `DECISIONS.md`, `ACTIVITY_LOG.md`, `CHANGELOG.md`, `docs/gitlab-ci-example.yml`
+- **GitHub** — PR template at `.github/PULL_REQUEST_TEMPLATE.md`
 
 ---

@@ -1,7 +1,7 @@
 {
-  "name": "TS React SPA Template",
-  "short_name": "TS Template",
-  "description": "Advanced TypeScript React SPA built with Vite",
+  "name": "My App",
+  "short_name": "My App",
+  "description": "A production-grade TypeScript React application",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

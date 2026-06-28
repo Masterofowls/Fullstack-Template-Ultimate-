@@ -1,13 +1,26 @@
+// ── Edit STACK_ITEMS to reflect your project's actual tech choices ───────────
+const STACK_ITEMS = [
+  { name: "Vite 6", desc: "Next-generation build tool with instant HMR" },
+  { name: "React 19", desc: "Latest React with concurrent features" },
+  { name: "TypeScript 5.7", desc: "Strict type checking across the codebase" },
+  { name: "React Router 7", desc: "Declarative routing with data loading" },
+  { name: "Biome", desc: "Unified linter and formatter" },
+  { name: "Bun", desc: "Blazing-fast JavaScript runtime and package manager" },
+] as const;
+
 export function HomePage() {
+  const appName = import.meta.env.VITE_APP_NAME ?? "My App";
+  const description =
+    import.meta.env.VITE_APP_DESCRIPTION ?? "A production-grade TypeScript React application";
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
       <section className="text-center">
         <h1 className="mb-4 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl dark:text-white">
-          Vite + React SPA
+          {appName}
         </h1>
         <p className="mx-auto mb-8 max-w-xl text-lg text-slate-600 dark:text-slate-400">
-          A fast, modern single-page application template built with Vite 6, React 19, and
-          TypeScript 5.
+          {description}
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <a
@@ -51,12 +64,3 @@ export function HomePage() {
     </div>
   );
 }
-
-const STACK_ITEMS = [
-  { name: "Vite 6", desc: "Next-generation build tool with instant HMR" },
-  { name: "React 19", desc: "Latest React with concurrent features" },
-  { name: "TypeScript 5.7", desc: "Strict type checking across the codebase" },
-  { name: "React Router 7", desc: "Declarative routing with data loading" },
-  { name: "Biome", desc: "Unified linter and formatter" },
-  { name: "Bun", desc: "Blazing-fast JavaScript runtime and package manager" },
-] as const;

@@ -75,6 +75,16 @@
   },
   "overrides": [
     {
+      "include": ["tests/**/*.ts", "**/*.test.ts", "**/*.spec.ts"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noDelete": "off"
+          }
+        }
+      }
+    },
+    {
       "include": ["*.config.ts", "*.config.js", "jest.config.ts"],
       "linter": {
         "rules": {
