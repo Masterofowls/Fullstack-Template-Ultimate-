@@ -1,0 +1,17 @@
+{
+  "name": "TS React SPA Template",
+  "short_name": "TS Template",
+  "description": "Advanced TypeScript React SPA built with Vite",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
