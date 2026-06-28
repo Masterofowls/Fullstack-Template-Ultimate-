@@ -1,3 +1,4 @@
+import { truncate } from "@/lib/utils.js";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -42,8 +43,10 @@ const FEATURES = [
 
 export default function HomePage() {
   const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "My App";
-  const appDescription =
-    process.env.NEXT_PUBLIC_APP_DESCRIPTION ?? "A production-grade TypeScript React application";
+  const appDescription = truncate(
+    process.env.NEXT_PUBLIC_APP_DESCRIPTION ?? "A production-grade TypeScript React application",
+    160,
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">

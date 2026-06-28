@@ -70,8 +70,10 @@ endif
 
 .PHONY: help install dev dev-web dev-spa build build-web build-spa \
         test test-unit test-integration test-e2e test-watch test-coverage \
-        lint format check fix typecheck \
-        cve index-check \
+        lint lint-css lint-css-fix format check fix typecheck \
+        knip knip-fix \
+        deps-check deps-update deps-taze deps-taze-write \
+        cve cve-ci index-check index-fix \
         setup init init-ps init-config \
         docker-up docker-down docker-build docker-logs \
         clean clean-build env-check rollback ci
@@ -108,10 +110,20 @@ help:
 	@echo ""
 	@echo "$(BOLD)Code Quality$(RESET)"
 	@echo "  make typecheck      TypeScript type check (all workspaces)"
-	@echo "  make lint           Biome lint"
+	@echo "  make lint           Biome lint (TS/JS/JSX)"
+	@echo "  make lint-css       Stylelint CSS check"
+	@echo "  make lint-css-fix   Stylelint CSS auto-fix"
 	@echo "  make format         Biome format check"
 	@echo "  make check          Biome lint + format (no write)"
 	@echo "  make fix            Biome auto-fix (lint + format)"
+	@echo "  make knip           Knip dead-code / unused deps scan"
+	@echo "  make knip-fix       Knip with auto-fix"
+	@echo ""
+	@echo "$(BOLD)Dependency Updates$(RESET)"
+	@echo "  make deps-check     Check outdated deps (ncu, read-only)"
+	@echo "  make deps-update    Upgrade deps in package.json (ncu --upgrade)"
+	@echo "  make deps-taze      Check outdated deps (taze, read-only)"
+	@echo "  make deps-taze-write  Upgrade deps in package.json (taze --write)"
 	@echo ""
 	@echo "$(BOLD)Security & Validation$(RESET)"
 	@echo "  make cve            CVE Lite scan (OSV.dev)"
@@ -211,8 +223,16 @@ typecheck:
 	$(BUN) run typecheck
 
 lint:
-	@echo "$(GREEN)Linting (Biome)...$(RESET)"
+	@echo "$(GREEN)Linting TypeScript/JSX (Biome)...$(RESET)"
 	$(BUN) run lint
+
+lint-css:
+	@echo "$(GREEN)Linting CSS (Stylelint)...$(RESET)"
+	$(BUN) run lint:css
+
+lint-css-fix:
+	@echo "$(YELLOW)Auto-fixing CSS (Stylelint)...$(RESET)"
+	$(BUN) run lint:css:fix
 
 format:
 	@echo "$(GREEN)Format check (Biome)...$(RESET)"
@@ -225,6 +245,32 @@ check:
 fix:
 	@echo "$(YELLOW)Applying Biome auto-fix...$(RESET)"
 	$(BUN) run check:fix
+
+# ── Dead code & unused deps (Knip) ───────────────────────────────────────────
+knip:
+	@echo "$(GREEN)Running Knip dead-code scan...$(RESET)"
+	$(BUN) run knip
+
+knip-fix:
+	@echo "$(YELLOW)Running Knip with auto-fix...$(RESET)"
+	$(BUN) run knip:fix
+
+# ── Dependency updates ────────────────────────────────────────────────────────
+deps-check:
+	@echo "$(GREEN)Checking for outdated dependencies (ncu)...$(RESET)"
+	$(BUN) run deps:check
+
+deps-update:
+	@echo "$(YELLOW)Writing dependency updates (ncu --upgrade)...$(RESET)"
+	$(BUN) run deps:update
+
+deps-taze:
+	@echo "$(GREEN)Checking for outdated dependencies (taze)...$(RESET)"
+	$(BUN) run deps:taze
+
+deps-taze-write:
+	@echo "$(YELLOW)Writing dependency updates (taze --write)...$(RESET)"
+	$(BUN) run deps:taze:write
 
 # ── Security & Validation ─────────────────────────────────────────────────────
 cve:
@@ -278,7 +324,7 @@ rollback:
 
 # ── Full CI pipeline (local) ──────────────────────────────────────────────────
 # Runs the same steps as .github/workflows/ci.yml — useful for pre-push checks.
-ci: install typecheck check test-unit build cve-ci index-check
+ci: install typecheck check lint-css knip test-unit build cve-ci index-check
 	@echo ""
 	@echo "$(GREEN)$(BOLD)✓ Full CI pipeline passed.$(RESET)"
 	@echo ""

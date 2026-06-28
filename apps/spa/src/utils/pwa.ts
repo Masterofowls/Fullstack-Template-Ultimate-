@@ -11,7 +11,10 @@ type SwUpdateCallback = (registration: ServiceWorkerRegistration) => void;
 
 let updateCallback: SwUpdateCallback | undefined;
 
-/** Override the default alert with your own UI (e.g. a toast notification). */
+/**
+ * Override the default reload-confirm with your own UI (e.g. a toast notification).
+ * @public — intentionally exported for callers to customise update UX.
+ */
 export function onServiceWorkerUpdate(cb: SwUpdateCallback): void {
   updateCallback = cb;
 }

@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #fff;
   --foreground: #171717;
   --primary: #2563eb;
-  --primary-foreground: #ffffff;
+  --primary-foreground: #fff;
   --muted: #f3f4f6;
   --muted-foreground: #6b7280;
   --border: #e5e7eb;
@@ -22,9 +22,9 @@
 }
 
 body {
+  font-family: var(--font-geist-sans, system-ui, sans-serif);
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-geist-sans, system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

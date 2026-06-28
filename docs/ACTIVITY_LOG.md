@@ -22,6 +22,17 @@ Running history of significant changes to this project.
 - **Docs** — `ARCHITECTURE.md`, `DECISIONS.md`, `ACTIVITY_LOG.md`, `CHANGELOG.md`, `docs/gitlab-ci-example.yml`
 - **GitHub** — PR template at `.github/PULL_REQUEST_TEMPLATE.md`
 
+## 2026-06-28 (Tooling: Stylelint, Knip, ncu, Taze, React Scan)
+
+- **Stylelint** — `.stylelintrc.json` with `stylelint-config-standard` + `stylelint-config-recess-order`; Tailwind at-rules allowed; `lint:css` + `lint:css:fix` scripts; Stylelint CI job added; CSS auto-fixed on integration
+- **Knip** — `knip.json` with full workspace map (all 8 workspaces); exit-0 after removing duplicate barrel and marking public exports; CI job added; `knip` + `knip:fix` scripts
+- **ncu** — `.ncurc.json` (bun package manager, latest target, group format); `deps:check` + `deps:update` scripts; `make deps-check` + `make deps-update` targets
+- **Taze** — `taze.config.ts` (recursive, write-false for dry-run safety); `deps:taze` + `deps:taze:write` scripts; `make deps-taze` + `make deps-taze-write` targets
+- **React Scan** — `apps/web/src/components/ReactScanMonitor.tsx`: `"use client"` component; lazy-loads `react-scan` only when `NODE_ENV=development` + `NEXT_PUBLIC_ENABLE_REACT_SCAN=true`; mounted in layout.tsx; `apps/spa/src/utils/react-scan.ts`: `initReactScan()` called before `createRoot()` in main.tsx; controlled by `VITE_ENABLE_REACT_SCAN`
+- **package.json** — added 8 new scripts: `lint:css`, `lint:css:fix`, `knip`, `knip:fix`, `deps:check`, `deps:update`, `deps:taze`, `deps:taze:write`
+- **Makefile** — added `lint-css`, `lint-css-fix`, `knip`, `knip-fix`, `deps-check`, `deps-update`, `deps-taze`, `deps-taze-write` targets; `ci` pipeline extended with `lint-css` + `knip` steps
+- **.env.example** — added `NEXT_PUBLIC_ENABLE_REACT_SCAN`, `VITE_ENABLE_REACT_SCAN`
+
 ## 2026-06-28 (PWA / SEO / OG / License)
 
 - **LICENSE** — MIT license added at repo root

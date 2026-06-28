@@ -1,4 +1,5 @@
 import { PwaRegistration } from "@/components/PwaRegistration.js";
+import { ReactScanMonitor } from "@/components/ReactScanMonitor.js";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
@@ -120,6 +121,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <main id="main-content">{children}</main>
         {/* PWA service worker registration — client-side only */}
         <PwaRegistration />
+        {/* React Scan — dev-only render profiler (NEXT_PUBLIC_ENABLE_REACT_SCAN=true) */}
+        <ReactScanMonitor />
       </body>
     </html>
   );
